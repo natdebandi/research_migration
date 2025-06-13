@@ -25,8 +25,58 @@ library(kableExtra) # Mejora en la presentación de tablas
 enma <- read.csv("data/ENMA2023_final_public.csv")
 
 
+names(enma)
+```
+
+
+TABLA DE FRECUENCIAS PONDERADA Y NO PONDERADA
+
+
+```{r}
+
+
+salud<-enma %>%
+  group_by(q36_salud) %>% 
+  summarise( n=n(),
+             cantidad = sum(weightvec)) %>% 
+  mutate(porcentaje_sin_pond = (n/sum(n))*100,
+    porcentaje_pond = (cantidad/sum(cantidad))*100) 
+
+salud
+  
 
 ```
+
+tabla de frecuencias bivariada o CRUCE DE VARIABLES
+
+
+```{r}
+
+
+salud<-enma %>%
+  filter(!is.na(q36_salud) & q36_salud!="No sé" & q36_salud!="") %>%
+  filter(genero_agrup!="Prefiero no responder") %>%
+  group_by(genero_agrup,q36_salud) %>% 
+  summarise( n=n(),
+             cantidad = sum(weightvec)) %>% 
+  mutate(porcentaje_sin_pond = (n/sum(n))*100,
+    porcentaje_pond = (cantidad/sum(cantidad))*100) 
+salud
+## exportar salud a excel
+#write.csv(salud, "data/salud.csv", row.names = FALSE)
+
+
+#pivot results
+salud_pivot<-salud %>% 
+  select(q36_salud, genero_agrup, porcentaje_pond) %>%
+  pivot_wider(names_from = genero_agrup, values_from = porcentaje_pond)
+
+salud_pivot
+  
+
+```
+
+
 
 
 
