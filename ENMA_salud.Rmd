@@ -1,0 +1,60 @@
+---
+title: "ENMA_salud"
+output: html_document
+---
+
+# Cargar librerías
+```{r librerias, echo=TRUE, message=FALSE, warning=FALSE}
+# Cargar librerías
+library(tidyverse)  # Manipulación y visualización de datos
+library(readxl)     # Lectura de archivos Excel
+library(janitor)    # Limpieza y estandarización de nombres de variables
+library(knitr)      # Generación de tablas en documentos dinámicos
+library(kableExtra) # Mejora en la presentación de tablas
+```
+
+# Cargar la base de datos ENMA 2023
+```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Carga del archivo CSV con la base de datos de la ENMA 2023
+enma <- read.csv("data/ENMA2023_final_public.csv")
+
+
+names(enma)
+```
+
+# Tabla de frecuencias ponderada y no ponderada
+```{r tabla_frecuencias, echo=TRUE}
+
+salud <- enma %>%
+  group_by(q36_salud) %>% 
+  summarise(absoluto = n(),
+            ponderado = sum(weightvec)) %>% 
+  mutate(porcentaje_sin_pond = (absoluto / sum(absoluto)) * 100,
+         porcentaje_pond = (ponderado / sum(ponderado)) * 100)
+salud
+```
+
+# Tabla de frecuencias bivariada o cruce de variables
+```{r tabla_frecuencias_bivariada, echo=TRUE}
+
+salud <- enma %>%
+  filter(!is.na(q36_salud) & q36_salud != "No sé" & q36_salud != "") %>%
+  filter(genero_agrup != "Prefiero no responder") %>%
+  group_by(genero_agrup, q36_salud) %>%
+  summarise(absoluto = n(),
+            ponderado = sum(weightvec)) %>%
+  mutate(porcentaje_sin_pond = (absoluto / sum(absoluto)) * 100,
+         porcentaje_pond = (ponderado / sum(ponderado)) * 100)
+
+salud
+
+# Tabla pivot
+salud_pivot <- salud %>%
+  select(q36_salud, genero_agrup, porcentaje_pond) %>%
+  pivot_wider(names_from = genero_agrup, values_from = porcentaje_pond) %>%
+  rename(Salud=q36_salud)
+salud_pivot
+
+```
+  

@@ -1,0 +1,62 @@
+---
+title: "CENSO_salud_argentina"
+output: html_document
+---
+
+## POBLACIÓN ARGENTINA
+# Cargar librerías
+```{r librerias, echo=TRUE, message=FALSE, warning=FALSE}
+# Cargar librerías
+library(tidyverse)  # Manipulación y visualización de datos
+library(readxl)     # Lectura de archivos Excel
+library(janitor)    # Limpieza y estandarización de nombres de variables
+library(knitr)      # Generación de tablas en documentos dinámicos
+library(kableExtra) # Mejora en la presentación de tablas
+```
+# Cargar la base de datos de salud de CENSO 2023
+```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
+# Carga del archivo xlsX con la base de datos de CENSO 2023
+censo_salud_arg_1 <- read_excel("data/CENSO_salud.xlsx", sheet = "Hoja2")
+censo_salud_arg_2 <- read_excel("data/CENSO_salud.xlsx", sheet = "Hoja3")
+# Verificar los nombres de las variables
+names(censo_salud_arg_1)
+names(censo_salud_arg_2)
+censo_salud_arg_1
+censo_salud_arg_2
+```
+
+```{r tabla_frecuencias, echo=TRUE}  
+# Limpiar tablas
+censo_salud_arg_1 <- censo_salud_arg_1 %>%
+  rename(Salud = "...2", Mujer = `Mujer / Femenino`, Hombre = `Varón / Masculino`) %>%
+  select(Salud, Mujer, Hombre) %>%
+  mutate(Mujer = as.numeric(gsub("\\s+","",Mujer)),  # Eliminar espacios y convertir a numérico
+         Hombre = as.numeric(gsub("\\s+","",Hombre)))
+censo_salud_arg_2 <- censo_salud_arg_2 %>%
+  rename(Salud = "...2", Mujer = `Mujer / Femenino`, Hombre = `Varón / Masculino`) %>%
+  select(Salud, Mujer, Hombre) %>%
+  mutate(Mujer = as.numeric(gsub("\\s+","",Mujer)),  # Eliminar espacios y convertir a numérico
+         Hombre = as.numeric(gsub("\\s+","",Hombre)))
+censo_salud_arg_1
+censo_salud_arg_2
+```
+# Tabla de frecuencias
+```{r tabla_frecuencias, echo=TRUE}
+# Unir las dos tablas
+censo_salud_arg <- rbind(censo_salud_arg_1, censo_salud_arg_2)
+  
+censo_salud_arg <- censo_salud_arg %>%
+  group_by(Salud) %>%
+  summarise(
+    Mujer = sum(Mujer),
+    Hombre = sum(Hombre)
+  )
+# Calcular porcentajes
+censo_salud_arg <- censo_salud_arg %>%
+  mutate(Porcentaje_Mujer = Mujer / sum(Mujer) * 100,
+         Porcentaje_Hombre = Hombre / sum(Hombre) * 100) %>%
+  select(Salud, Porcentaje_Mujer, Porcentaje_Hombre)
+
+censo_salud_arg
+
+```
