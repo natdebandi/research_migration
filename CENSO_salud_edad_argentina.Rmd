@@ -1,0 +1,85 @@
+---
+title: "CENSO_salud_edad_argentina"
+output: html_document
+---
+## POBLACIÓN ARGENTINA
+# Cargar librerías
+```{r librerias, echo=TRUE, message=FALSE, warning=FALSE}
+# Cargar librerías
+library(tidyverse)  # Manipulación y visualización de datos
+library(readxl)     # Lectura de archivos Excel
+library(janitor)    # Limpieza y estandarización de nombres de variables
+library(knitr)      # Generación de tablas en documentos dinámicos
+library(kableExtra) # Mejora en la presentación de tablas
+```
+
+# Cargar la base de datos de salud de CENSO 2023
+```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
+# Carga del archivo xlsX con la base de datos de CENSO 2023
+censo_salud_arg_1 <- read_excel("data/CENSO_salud_edades.xlsx", sheet = "arg1")
+censo_salud_arg_2 <- read_excel("data/CENSO_salud_edades.xlsx", sheet = "arg2")
+
+# Verificar los nombres de las variables
+names(censo_salud_arg_1)
+names(censo_salud_arg_2)
+
+# Renombre
+censo_salud_arg_1 <- censo_salud_arg_1 %>%
+  rename(Salud = "...1")
+censo_salud_arg_2 <- censo_salud_arg_2 %>%
+  rename(Salud = "...1")
+
+# Verificar las tablas
+censo_salud_arg_1
+censo_salud_arg_2
+```
+
+# Unir columnas por grupos de edad
+```{r unir_columnas, echo=TRUE}
+# Unir columnas por grupos de edad
+censo_salud_arg_1 <- censo_salud_arg_1 %>%
+  mutate(`20 A 34` = `20 A 24` + `25 A 29` + `30 A 34`,
+         `35 A 54` = `35 A 39` + `40 A 44` + `45 A 49` + `50 A 54`,
+         `+55` = `55 A 59` + `60 A 64` + `65 A 69` + `70 A 74` + 
+                 `75 A 79` + `80 A 84` + `85 A 89` + `90 A 94` + 
+                 `95 A 99` + `100 A 104` + `105 Y MÁS`) %>%
+  select(Salud, `20 A 34`, `35 A 54`, `+55`)
+censo_salud_arg_2 <- censo_salud_arg_2 %>%
+  mutate(`20 A 34` = `20 A 24` + `25 A 29` + `30 A 34`,
+         `35 A 54` = `35 A 39` + `40 A 44` + `45 A 49` + `50 A 54`,
+         `+55` = `55 A 59` + `60 A 64` + `65 A 69` + `70 A 74` + 
+                 `75 A 79` + `80 A 84` + `85 A 89` + `90 A 94` + 
+                 `95 A 99` + `100 A 104` + `105 Y MÁS`) %>%
+  select(Salud, `20 A 34`, `35 A 54`, `+55`)
+
+# Verificar la unión de columnas
+censo_salud_arg_1
+censo_salud_arg_2
+```
+
+# Sumar tablas
+```{r sumar_tablas, echo=TRUE}
+# Unir las dos tablas
+censo_salud_arg <- rbind(censo_salud_arg_1, censo_salud_arg_2)
+# Agrupar por salud y sumar las columnas de edad
+censo_salud_arg <- censo_salud_arg %>%
+  group_by(Salud) %>%
+  summarise(
+    `20 A 34` = sum(`20 A 34`, na.rm = TRUE),
+    `35 A 54` = sum(`35 A 54`, na.rm = TRUE),
+    `+55` = sum(`+55`, na.rm = TRUE)
+  )
+# Verificar la tabla unida
+censo_salud_arg
+```
+# Tabla de frecuencias
+```{r tabla_frecuencias, echo=TRUE}
+# Calcular porcentajes
+censo_salud_arg <- censo_salud_arg %>%
+  mutate(Porcentaje_20a34 = `20 A 34` / sum(`20 A 34`, na.rm = TRUE) * 100,
+         Porcentaje_35a54 = `35 A 54` / sum(`35 A 54`, na.rm = TRUE) * 100,
+         Porcentaje_mayores55 = `+55` / sum(`+55`, na.rm = TRUE) * 100) %>%
+  select(Salud, Porcentaje_20a34, Porcentaje_35a54, Porcentaje_mayores55)
+censo_salud_arg
+```
+

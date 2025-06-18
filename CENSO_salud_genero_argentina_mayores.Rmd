@@ -1,7 +1,8 @@
 ---
-title: "CENSO_salud_argentina"
+title: "CENSO_salud_argentina_mayores"
 output: html_document
 ---
+
 
 ## POBLACIÓN ARGENTINA
 # Cargar librerías
@@ -16,8 +17,8 @@ library(kableExtra) # Mejora en la presentación de tablas
 # Cargar la base de datos de salud de CENSO 2023
 ```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
 # Carga del archivo xlsX con la base de datos de CENSO 2023
-censo_salud_arg_1 <- read_excel("data/CENSO_salud.xlsx", sheet = "Hoja2")
-censo_salud_arg_2 <- read_excel("data/CENSO_salud.xlsx", sheet = "Hoja3")
+censo_salud_arg_1 <- read_excel("data/CENSO_salud_mayores.xlsx", sheet = "arg1")
+censo_salud_arg_2 <- read_excel("data/CENSO_salud_mayores.xlsx", sheet = "arg2")
 # Verificar los nombres de las variables
 names(censo_salud_arg_1)
 names(censo_salud_arg_2)
@@ -25,15 +26,16 @@ censo_salud_arg_1
 censo_salud_arg_2
 ```
 
+
 ```{r tabla_frecuencias, echo=TRUE}  
 # Limpiar tablas
 censo_salud_arg_1 <- censo_salud_arg_1 %>%
-  rename(Salud = "...2", Mujer = `Mujer / Femenino`, Hombre = `Varón / Masculino`) %>%
+  rename(Salud = "...1", Mujer = `Mujer / Femenino`, Hombre = `Varón / Masculino`) %>%
   select(Salud, Mujer, Hombre) %>%
   mutate(Mujer = as.numeric(gsub("\\s+","",Mujer)),  # Eliminar espacios y convertir a numérico
          Hombre = as.numeric(gsub("\\s+","",Hombre)))
 censo_salud_arg_2 <- censo_salud_arg_2 %>%
-  rename(Salud = "...2", Mujer = `Mujer / Femenino`, Hombre = `Varón / Masculino`) %>%
+  rename(Salud = "...1", Mujer = `Mujer / Femenino`, Hombre = `Varón / Masculino`) %>%
   select(Salud, Mujer, Hombre) %>%
   mutate(Mujer = as.numeric(gsub("\\s+","",Mujer)),  # Eliminar espacios y convertir a numérico
          Hombre = as.numeric(gsub("\\s+","",Hombre)))

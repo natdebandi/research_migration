@@ -1,0 +1,55 @@
+---
+title: "CENSO_salud_edad_total"
+output: html_document
+---
+
+
+## POBLACIÓN TOTAL
+# Cargar librerías
+```{r librerias, echo=TRUE, message=FALSE, warning=FALSE}
+# Cargar librerías
+library(tidyverse)  # Manipulación y visualización de datos
+library(readxl)     # Lectura de archivos Excel
+library(janitor)    # Limpieza y estandarización de nombres de variables
+library(knitr)      # Generación de tablas en documentos dinámicos
+library(kableExtra) # Mejora en la presentación de tablas
+```
+
+# Cargar la base de datos de salud de CENSO 2023
+```{r carga_total, echo=TRUE, message=FALSE, warning=FALSE}
+# Carga del archivo xlsX con la base de datos de CENSO 2023
+censo_salud_total <- read_excel("data/CENSO_salud_edades.xlsx", sheet = "total")
+# Verificar los nombres de las variables
+names(censo_salud_total)
+
+# renombrar columna 1
+censo_salud_total <- censo_salud_total %>%
+  rename(Salud = "...1")
+censo_salud_total
+
+
+```
+
+# Unir columnas por grupos de edad
+```{r unir_columnas_total, echo=TRUE}
+# Unir columnas por grupos de edad
+censo_salud_total <- censo_salud_total %>%
+  mutate(`20 A 34` = `20 A 24` + `25 A 29` + `30 A 34`,
+         `35 A 54` = `35 A 39` + `40 A 44` + `45 A 49` + `50 A 54`,
+         `+55` = `55 A 59` + `60 A 64` + `65 A 69` + `70 A 74` + 
+                 `75 A 79` + `80 A 84` + `85 A 89` + `90 A 94` + 
+                 `95 A 99` + `100 A 104` + `105 Y MÁS`) %>%
+  select(Salud, `20 A 34`, `35 A 54`, `+55`)
+# Verificar la unión de columnas
+censo_salud_total
+```
+# Tabla de frecuencias
+```{r tabla_frecuencias_total, echo=TRUE}
+censo_salud_total_frecuencias <- censo_salud_total %>%
+  mutate(Porcentaje_20a34 = `20 A 34` / sum(`20 A 34`, na.rm = TRUE) * 100,
+         Porcentaje_35a54 = `35 A 54` / sum(`35 A 54`, na.rm = TRUE) * 100,
+         Porcentaje_mayores55 = `+55` / sum(`+55`, na.rm = TRUE) * 100) %>%
+  select(Salud, Porcentaje_20a34, Porcentaje_35a54, Porcentaje_mayores55)
+censo_salud_total_frecuencias
+```
+
