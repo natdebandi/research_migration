@@ -19,8 +19,8 @@ library(kableExtra) # Mejora en la presentación de tablas
 # Carga del archivo CSV con la base de datos de la ENMA 2023
 enma <- read.csv("data/ENMA2023_final_public.csv")
 
-
-names(enma)
+enma$q51_situacion_ocupacional
+#names(enma)
 ```
 
 # Tabla de frecuencias ponderada y no ponderada
