@@ -1,5 +1,5 @@
 ---
-title: "ENMA_salud_edad"
+title: "Exploración datos ENMA"
 output: html_document
 ---
 
@@ -15,19 +15,25 @@ library(knitr)      # Generación de tablas en documentos dinámicos
 library(kableExtra) # Mejora en la presentación de tablas
 ```
 
+
+
 ## Carga de la base de datos ENMA 2023
 
 ```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
 
 # Carga del archivo CSV con la base de datos de la ENMA 2023
-enma <- read.csv("data/ENMA2023_final_public.csv")
+enma <- read.csv("../data/ENMA2023_final_public.csv")
 
 
 names(enma)
 ```
 
-## Tabla de frecuencias ponderada y no ponderada
-```{r tabla_frecuencias, echo=TRUE}
+
+TABLA DE FRECUENCIAS PONDERADA Y NO PONDERADA
+
+
+```{r}
+
 
 salud<-enma %>%
   group_by(q36_salud) %>% 
@@ -37,28 +43,40 @@ salud<-enma %>%
     porcentaje_pond = (cantidad/sum(cantidad))*100) 
 
 salud
+  
 
 ```
 
-## Tabla de frecuencias bivariada o cruce de variables
+tabla de frecuencias bivariada o CRUCE DE VARIABLES
 
-```{r tabla_frecuencias_bivariada, echo=TRUE}
-salud <- enma %>%
-  filter(!is.na(q36_salud) & q36_salud != "No sé" & q36_salud != "") %>%
-  group_by(edad_agrup, q36_salud) %>%
-  summarise(absoluto = n(),
-            ponderado = sum(weightvec)) %>%
-  mutate(porcentaje_sin_pond = (absoluto / sum(absoluto)) * 100,
-         porcentaje_pond = (ponderado / sum(ponderado)) * 100)
 
+```{r}
+
+
+salud<-enma %>%
+  filter(!is.na(q36_salud) & q36_salud!="No sé" & q36_salud!="") %>%
+  filter(genero_agrup!="Prefiero no responder") %>%
+  group_by(genero_agrup,q36_salud) %>% 
+  summarise( n=n(),
+             cantidad = sum(weightvec)) %>% 
+  mutate(porcentaje_sin_pond = (n/sum(n))*100,
+    porcentaje_pond = (cantidad/sum(cantidad))*100) 
 salud
+## exportar salud a excel
+#write.csv(salud, "data/salud.csv", row.names = FALSE)
 
-# Tabla pivot
-salud_pivot <- salud %>%
-  select(q36_salud, edad_agrup, porcentaje_pond) %>%
-  pivot_wider(names_from = edad_agrup, values_from = porcentaje_pond) %>%
-  rename(Salud=q36_salud)
+
+#pivot results
+salud_pivot<-salud %>% 
+  select(q36_salud, genero_agrup, porcentaje_pond) %>%
+  pivot_wider(names_from = genero_agrup, values_from = porcentaje_pond)
 
 salud_pivot
+  
 
 ```
+
+
+
+
+

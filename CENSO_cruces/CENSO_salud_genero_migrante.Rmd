@@ -1,8 +1,7 @@
 ---
-title: "CENSO_salud_migrante_mayores"
+title: "CENSO_salud"
 output: html_document
 ---
-
 ## POBLACIÓN MIGRANTE
 # Cargar librerías
 ```{r librerias, echo=TRUE, message=FALSE, warning=FALSE}
@@ -17,7 +16,7 @@ library(kableExtra) # Mejora en la presentación de tablas
 # Cargar la base de datos de salud de CENSO 2023
 ```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
 # Carga del archivo xlsX con la base de datos de CENSO 2023
-censo_salud <- read_excel("data/CENSO_salud_mayores.xlsx", sheet = "Migrante")
+censo_salud <- read_excel("../data/CENSO_salud.xlsx", sheet = "Migrante")
 # Verificar los nombres de las variables
 names(censo_salud)
 censo_salud

@@ -1,0 +1,99 @@
+---
+title: "ENMA_exportar"
+output: html_document
+---
+
+# Cargar librerías
+```{r librerias, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Cargar librerías
+library(tidyverse)  # Manipulación y visualización de datos
+library(readxl)     # Lectura de archivos Excel
+library(janitor)    # Limpieza y estandarización de nombres de variables
+library(knitr)      # Generación de tablas en documentos dinámicos
+library(kableExtra) # Mejora en la presentación de tablas
+library(openxlsx)   # Exportación de datos a Excel
+```
+
+# Cargar la base de datos ENMA 2023
+```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Carga del archivo CSV con la base de datos de la ENMA 2023
+enma <- read.csv("../data/ENMA2023_final_public.csv")
+
+
+names(enma)
+```
+
+# Tabla con valores absolutos
+
+```{r tabla_valores_absolutos, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Crear una tabla con los valores absolutos de las variables
+
+ENMA_cobertura_de_salud <- enma %>%
+  group_by(q36_salud) %>%
+  filter(!is.na(q36_salud) & q36_salud != "No sé" & q36_salud != "") %>%
+  summarise(ponderado = sum(weightvec))
+
+ENMA_descendencia_afro <- enma %>%
+  group_by(q5_descendencia_afro) %>%
+  filter(!is.na(q5_descendencia_afro), q5_descendencia_afro != "") %>%
+  summarise(ponderado = sum(weightvec))
+
+ENMA_descendencia_indigena <- enma %>%
+  group_by(q5_descendencia_indigena) %>%
+  filter(!is.na(q5_descendencia_indigena), q5_descendencia_indigena != "") %>%
+  summarise(ponderado = sum(weightvec))
+
+ENMA_edad_agrupada <- enma %>%
+  group_by(edad_agrup) %>%
+  filter(!is.na(edad_agrup)) %>%
+  summarise(ponderado = sum(weightvec))
+
+ENMA_identidad_genero <- enma %>%
+  group_by(genero_agrup) %>%
+  filter(!is.na(genero_agrup), genero_agrup != "") %>%
+  summarise(ponderado = sum(weightvec))
+
+ENMA_nivel_educativo <- enma %>%
+  group_by(niveled_agrup) %>%
+  filter(!is.na(niveled_agrup), niveled_agrup != "") %>%
+  summarise(ponderado = sum(weightvec))
+
+```
+
+# Exportar a excel
+
+```{r exportar_excel, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Crear un archivo Excel para exportar los resultados
+
+file_export <- paste("excel\\", "ENMA_tablas", ".xlsx", sep="")
+
+wb <- createWorkbook()
+
+# Exportar todas las tabla a un archivo Excel
+
+tabla_list <- list(
+  "SALUD" = ENMA_cobertura_de_salud,
+  "DESCENDENCIA_AFRO" = ENMA_descendencia_afro,
+  "DESCENDENCIA_INDIGENA" = ENMA_descendencia_indigena,
+  "EDAD" = ENMA_edad_agrupada,
+  "IDENTIDAD_GENERO" = ENMA_identidad_genero,
+  "NIVEL_EDUCATIVO" = ENMA_nivel_educativo
+)
+
+# Crear hojas en el archivo Excel y escribir las tablas
+
+for (sheet_name in names(tabla_list)) {
+  addWorksheet(wb, sheet_name)
+  writeData(wb, sheet_name, tabla_list[[sheet_name]], rowNames = FALSE)
+}
+
+# Guardar el archivo Excel
+
+saveWorkbook(wb, file_export, overwrite = TRUE)
+
+```
+
