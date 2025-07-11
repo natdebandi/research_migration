@@ -364,7 +364,320 @@ library(kableExtra) # Mejora en la presentación de tablas</code></pre>
 <div id="carga-de-la-base-de-datos-enma-2023" class="section level2">
 <h2>Carga de la base de datos ENMA 2023</h2>
 <pre class="r"><code># Carga del archivo CSV con la base de datos de la ENMA 2023
-enma &lt;- read.csv(&quot;data/ENMA2023_final_public.csv&quot;)</code></pre>
+enma &lt;- read.csv(&quot;../data/ENMA2023_final_public.csv&quot;)
+
+
+names(enma)</code></pre>
+<pre><code>##   [1] &quot;ID&quot;                                                 
+##   [2] &quot;fecha&quot;                                              
+##   [3] &quot;q2_edad&quot;                                            
+##   [4] &quot;q3_pais_nacimiento&quot;                                 
+##   [5] &quot;q3_pais_otro&quot;                                       
+##   [6] &quot;q4_genero&quot;                                          
+##   [7] &quot;q4_otro&quot;                                            
+##   [8] &quot;q5_descendencia&quot;                                    
+##   [9] &quot;q5_descendencia_indigena&quot;                           
+##  [10] &quot;q5_descendencia_afro&quot;                               
+##  [11] &quot;q5_descendencia_asiatica&quot;                           
+##  [12] &quot;q5_descendencia_ninguno&quot;                            
+##  [13] &quot;q5_descendencia_otro&quot;                               
+##  [14] &quot;q5_descendencia_otro_descrip&quot;                       
+##  [15] &quot;q6_idioma&quot;                                          
+##  [16] &quot;q6_otro&quot;                                            
+##  [17] &quot;q7_nivel_castellano&quot;                                
+##  [18] &quot;q8_provincia_res&quot;                                   
+##  [19] &quot;q9_localidad&quot;                                       
+##  [20] &quot;q10_barrio&quot;                                         
+##  [21] &quot;q11_otra_provincia&quot;                                 
+##  [22] &quot;q12_modo_ingreso&quot;                                   
+##  [23] &quot;q13_anio_llegada&quot;                                   
+##  [24] &quot;q14_motivos&quot;                                        
+##  [25] &quot;q14_motivos_estudio&quot;                                
+##  [26] &quot;q14_motivos_mejor_trabajo&quot;                          
+##  [27] &quot;q14_motivos_nuevas_experiencias&quot;                    
+##  [28] &quot;q14_motivos_violencia_genero&quot;                       
+##  [29] &quot;q14_motivos_orientacion_sexual&quot;                     
+##  [30] &quot;q14_motivos_persecucion&quot;                            
+##  [31] &quot;q14_motivos_salud&quot;                                  
+##  [32] &quot;q14_motivos_habitat&quot;                                
+##  [33] &quot;q14_motivos_necesidades_basicas&quot;                    
+##  [34] &quot;q14_motivos_reunificacion&quot;                          
+##  [35] &quot;q14_motivos_acompañar_otrx&quot;                         
+##  [36] &quot;q14_motivos_otros&quot;                                  
+##  [37] &quot;q14_motivos_otros_detalle&quot;                          
+##  [38] &quot;q15_mudanza&quot;                                        
+##  [39] &quot;q16_mudanza_lugar&quot;                                  
+##  [40] &quot;q17_dni_tenencia&quot;                                   
+##  [41] &quot;q18_dni_situacion&quot;                                  
+##  [42] &quot;q19_situacion_documentaria&quot;                         
+##  [43] &quot;q19_documento_detalle&quot;                              
+##  [44] &quot;q20_dni_dificultad_binaria&quot;                         
+##  [45] &quot;q21_dni_dificultad&quot;                                 
+##  [46] &quot;q21_dni_dificultad_turnos&quot;                          
+##  [47] &quot;q21_dni_dificultad_demora&quot;                          
+##  [48] &quot;q21_dni_dificultad_internet&quot;                        
+##  [49] &quot;q21_dni_dificultad_costo&quot;                           
+##  [50] &quot;q21_dni_dificultad_turnos.1&quot;                        
+##  [51] &quot;q21_dni_dificultad_documentacion_origen&quot;            
+##  [52] &quot;q21_dni_dificultad_falta_info&quot;                      
+##  [53] &quot;q21_dni_dificultad_identidad_genero&quot;                
+##  [54] &quot;q21_dni_dificultad_otros&quot;                           
+##  [55] &quot;q21_dificultad_dni_detalle&quot;                         
+##  [56] &quot;q22_solicitud_asilo&quot;                                
+##  [57] &quot;q23_solicitud_asilo_si&quot;                             
+##  [58] &quot;q24_solicitud_asilo_no&quot;                             
+##  [59] &quot;q25_naturalizacion&quot;                                 
+##  [60] &quot;q26_hogar_personas&quot;                                 
+##  [61] &quot;q27_hogar_discapacidad&quot;                             
+##  [62] &quot;q28_hogar_convivencia&quot;                              
+##  [63] &quot;q29_hijos_num&quot;                                      
+##  [64] &quot;q30_hijos_arg&quot;                                      
+##  [65] &quot;q30_hijos_exterior&quot;                                 
+##  [66] &quot;q31_hijos_menores_exterior&quot;                         
+##  [67] &quot;q32_asistencia_educacion&quot;                           
+##  [68] &quot;q33_incoveniente_educacion&quot;                         
+##  [69] &quot;q33_incoveniente_educacion_no&quot;                      
+##  [70] &quot;q33_incoveniente_educacion_cupo&quot;                    
+##  [71] &quot;q33_inconveniente_educacion_inscripcion&quot;            
+##  [72] &quot;q33_inconveniente_educacion_dni&quot;                    
+##  [73] &quot;q33_inconveniente_educacion_documentacion_origen&quot;   
+##  [74] &quot;q33_inconveniente_educacion_documentacion_argentina&quot;
+##  [75] &quot;q33_inconveniente_educacion_otro&quot;                   
+##  [76] &quot;q33_especificar_educacion&quot;                          
+##  [77] &quot;q34_asistencia_educacion_razon&quot;                     
+##  [78] &quot;q34_especificar_razon&quot;                              
+##  [79] &quot;q35_educacion_discriminacion&quot;                       
+##  [80] &quot;q36_salud&quot;                                          
+##  [81] &quot;q37_salud_problemas&quot;                                
+##  [82] &quot;q37_salud_problemas_fisica&quot;                         
+##  [83] &quot;q37_salud_problemas_mental&quot;                         
+##  [84] &quot;q37_salud_problemas_esi&quot;                            
+##  [85] &quot;q37_salud_problemas_no&quot;                             
+##  [86] &quot;q38_salud_resolver_problema&quot;                        
+##  [87] &quot;q38_salud_resolver_problema_no&quot;                     
+##  [88] &quot;q38_salud_resolver_problema_hospitalpub&quot;            
+##  [89] &quot;q38_salud_resolver_problema_cen_ate_prim&quot;           
+##  [90] &quot;q38_salud_resolver_problema_prepaga&quot;                
+##  [91] &quot;q38_salud_resolver_problema_pago_consulta&quot;          
+##  [92] &quot;q38_salud_resolver_problema_tracional&quot;              
+##  [93] &quot;q38_salud_resolver_problema_recomendaciones&quot;        
+##  [94] &quot;q38_salud_resolver_problema_imposibilidad&quot;          
+##  [95] &quot;q38_salud_resolver_problema_otro&quot;                   
+##  [96] &quot;q39_salud_acceso&quot;                                   
+##  [97] &quot;q40_salud_acceso_dificultades&quot;                      
+##  [98] &quot;q40_salud_acceso_dificultades_dni&quot;                  
+##  [99] &quot;q40_salud_acceso_dificultades_domicilio&quot;            
+## [100] &quot;q40_salud_acceso_dificultades_maltrato&quot;             
+## [101] &quot;q40_salud_acceso_dificultades_pago&quot;                 
+## [102] &quot;q40_salud_acceso_dificultades_desconocimiento&quot;      
+## [103] &quot;q40_salud_acceso_dificultades_turnos&quot;               
+## [104] &quot;q40_salud_acceso_dificultades_idioma&quot;               
+## [105] &quot;q40_salud_acceso_dificultades_otra&quot;                 
+## [106] &quot;q41_vivienda_lugar&quot;                                 
+## [107] &quot;q42_vivienda_tipo&quot;                                  
+## [108] &quot;q42_vivienda_especificar&quot;                           
+## [109] &quot;q43_vivienda_es&quot;                                    
+## [110] &quot;q43_vivienda_es_especificar&quot;                        
+## [111] &quot;q44_vivienda_problemas&quot;                             
+## [112] &quot;q44_vivienda_problemas_no&quot;                          
+## [113] &quot;q44_vivienda_problemas_precio&quot;                      
+## [114] &quot;q44_vivienda_problemas_discriminacion&quot;              
+## [115] &quot;q44_vivienda_problemas_garantia&quot;                    
+## [116] &quot;q44_vivienda_problemas_compra&quot;                      
+## [117] &quot;q44_vivienda_problemas_ayudasocial&quot;                 
+## [118] &quot;q44_vivienda_problemas_desalojo&quot;                    
+## [119] &quot;q44_vivienda_problemas_estafa&quot;                      
+## [120] &quot;q44_vivienda_problemas_otra&quot;                        
+## [121] &quot;q44_vivienda_problemas_otra_especificar&quot;            
+## [122] &quot;q45_vivienda_servicios&quot;                             
+## [123] &quot;q45_vivienda_servicios_luz&quot;                         
+## [124] &quot;q45_vivienda_servicios_agua&quot;                        
+## [125] &quot;q45_vivienda_servicios_gas&quot;                         
+## [126] &quot;q45_vivienda_servicios_telefono&quot;                    
+## [127] &quot;q45_vivienda_servicios_internet&quot;                    
+## [128] &quot;q45_vivienda_servicios_cloaca&quot;                      
+## [129] &quot;q45_vivienda_servicios_alumbrado&quot;                   
+## [130] &quot;q45_vivienda_servicios_pavimentacion&quot;               
+## [131] &quot;q45_vivienda_servicios_rec_basura&quot;                  
+## [132] &quot;q45_vivienda_servicios_todos&quot;                       
+## [133] &quot;q46_estudios&quot;                                       
+## [134] &quot;q47_estudiando_argentina&quot;                           
+## [135] &quot;q48_estudiando_nivel&quot;                               
+## [136] &quot;q48_estudiando_nivel_prim&quot;                          
+## [137] &quot;q48_estudiando_nivel_sec&quot;                           
+## [138] &quot;q48_estudiando_nivel_ter&quot;                           
+## [139] &quot;q48_estudiando_nivel_uni&quot;                           
+## [140] &quot;q48_estudiando_nivel_postgrado&quot;                     
+## [141] &quot;q48_estudiando_nivel_capacitaciones&quot;                
+## [142] &quot;q49_estudiando_inconvenientes&quot;                      
+## [143] &quot;q50_estudiando_problemas&quot;                           
+## [144] &quot;q50_problemas_titulos_origen&quot;                       
+## [145] &quot;q50_problemas_dni&quot;                                  
+## [146] &quot;q50_problemas_doc_escolar&quot;                          
+## [147] &quot;q50_problemas_inscripcion_online&quot;                   
+## [148] &quot;q50_problemas_costos&quot;                               
+## [149] &quot;q50_problemas_discriminacion&quot;                       
+## [150] &quot;q50_problemas_otros&quot;                                
+## [151] &quot;q51_situacion_ocupacional&quot;                          
+## [152] &quot;q51_situacion_ocupacional_esp&quot;                      
+## [153] &quot;q54_ocupacion&quot;                                      
+## [154] &quot;q55_experiencia&quot;                                    
+## [155] &quot;q56_ocupacion_dificultad&quot;                           
+## [156] &quot;q57_dificultad_trabajo&quot;                             
+## [157] &quot;q57_dificultad_titulos&quot;                             
+## [158] &quot;q57_dificultad_discriminacion&quot;                      
+## [159] &quot;q57_dificultad_hogar&quot;                               
+## [160] &quot;q57_dificultad_sexual&quot;                              
+## [161] &quot;q57_dificultad_documentacion&quot;                       
+## [162] &quot;q57_dificultad_idioma&quot;                              
+## [163] &quot;q57_dificultad_edad&quot;                                
+## [164] &quot;q57_dificultad_inexperiencia&quot;                       
+## [165] &quot;q57_dificultad_falta_oferta&quot;                        
+## [166] &quot;q57_dificultad_salud&quot;                               
+## [167] &quot;q57_dificultad_desconocimiento&quot;                     
+## [168] &quot;q57_dificultad_prefiero_no&quot;                         
+## [169] &quot;q58_envio_dinero&quot;                                   
+## [170] &quot;q59_gastos&quot;                                         
+## [171] &quot;q59_gastos_ahorros&quot;                                 
+## [172] &quot;q59_gastos_préstamos_entorno&quot;                       
+## [173] &quot;q59_gastos_préstamos_bancos&quot;                        
+## [174] &quot;q59_gastos_cuotas&quot;                                  
+## [175] &quot;q59_gastos_fiado&quot;                                   
+## [176] &quot;q59_gastos_venta_pertenencias&quot;                      
+## [177] &quot;q59_gastos_ayuda_estatal&quot;                           
+## [178] &quot;q59_gastos_ayuda_organizaciones&quot;                    
+## [179] &quot;q59_gastos_ninguna&quot;                                 
+## [180] &quot;q59_gastos_prefiero_no&quot;                             
+## [181] &quot;q60_subsidios&quot;                                      
+## [182] &quot;q60_subsidios_no&quot;                                   
+## [183] &quot;q60_subsidios_auh&quot;                                  
+## [184] &quot;q60_subsidios_embarazo&quot;                             
+## [185] &quot;q60_subsidios_jubilacion&quot;                           
+## [186] &quot;q60_subsidios_pension&quot;                              
+## [187] &quot;q60_subsidios_pension_no_contrib&quot;                   
+## [188] &quot;q60_subsidios_progresar&quot;                            
+## [189] &quot;q60_subsidios_potenciar_trabajo&quot;                    
+## [190] &quot;q60_subsidios_inclusion_joven&quot;                      
+## [191] &quot;q60_subsidios_tarjeta_alimentar&quot;                    
+## [192] &quot;q60_subsidios_pieza&quot;                                
+## [193] &quot;q60_subsidios_desempleo&quot;                            
+## [194] &quot;q60_subsidios_otro&quot;                                 
+## [195] &quot;q60_subsidios_prefiero_no&quot;                          
+## [196] &quot;q60_subsidios_especificar&quot;                          
+## [197] &quot;q61_subsidios_problemas&quot;                            
+## [198] &quot;q62_discriminacion&quot;                                 
+## [199] &quot;q63_discriminacion&quot;                                 
+## [200] &quot;q63_discriminacion_estado&quot;                          
+## [201] &quot;q63_discriminacion_fuerzas&quot;                         
+## [202] &quot;q63_discriminacion_atencion_medica&quot;                 
+## [203] &quot;q63_discriminacion_educacion&quot;                       
+## [204] &quot;q63_discriminacion_calle&quot;                           
+## [205] &quot;q63_discriminacion_trabajo&quot;                         
+## [206] &quot;q63_discriminacion_grupos_sociales&quot;                 
+## [207] &quot;q63_discriminacion_transporte&quot;                      
+## [208] &quot;q63_discriminacion_medios_comunicacion&quot;             
+## [209] &quot;q63_discriminacion_otros&quot;                           
+## [210] &quot;q63_discriminacion_especificar&quot;                     
+## [211] &quot;q64_violencia_fuerza_seguridad&quot;                     
+## [212] &quot;q65_violencia_genero&quot;                               
+## [213] &quot;q66_participacion_organizacion&quot;                     
+## [214] &quot;q67_organizacion_&quot;                                  
+## [215] &quot;q67_organizacion_migrantes&quot;                         
+## [216] &quot;q67_organizacion_social&quot;                            
+## [217] &quot;q67_organizacion_movimiento_social&quot;                 
+## [218] &quot;q67_organizacion_partido&quot;                           
+## [219] &quot;q67_organizacion_religiosa&quot;                         
+## [220] &quot;q67_organizacion_cooperativa&quot;                       
+## [221] &quot;q67_organizacion_otra&quot;                              
+## [222] &quot;q67_organizacion_especificar&quot;                       
+## [223] &quot;q68_participacion_elecciones_locales&quot;               
+## [224] &quot;q69_participacion_no_&quot;                              
+## [225] &quot;q69_participacion_no_sabia&quot;                         
+## [226] &quot;q69_participacion_no_interes&quot;                       
+## [227] &quot;q69_participacion_no_dni&quot;                           
+## [228] &quot;q69_participacion_no_antiguedad&quot;                    
+## [229] &quot;q69_participacion_no_padron&quot;                        
+## [230] &quot;q69_participacion_no_lejania&quot;                       
+## [231] &quot;q69_participacion_no_desconocimiento&quot;               
+## [232] &quot;q69_participacion_no_permiso&quot;                       
+## [233] &quot;q70_paricipacion_elecciones_extranjero&quot;             
+## [234] &quot;q71_participacion_no_motivo&quot;                        
+## [235] &quot;q72_situacion_argentina_2anos&quot;                      
+## [236] &quot;genero_agrup&quot;                                       
+## [237] &quot;edad_agrup&quot;                                         
+## [238] &quot;nacionalidad_var&quot;                                   
+## [239] &quot;nacionalidad_agrup&quot;                                 
+## [240] &quot;region_amba_agrup&quot;                                  
+## [241] &quot;niveled_agrup&quot;                                      
+## [242] &quot;sec_completo_agrup&quot;                                 
+## [243] &quot;tiempo_residencia_agrup&quot;                            
+## [244] &quot;migracion_reciente&quot;                                 
+## [245] &quot;circuitos_laborales&quot;                                
+## [246] &quot;weightvec_0&quot;                                        
+## [247] &quot;weightvec&quot;</code></pre>
+<p>TABLA DE FRECUENCIAS PONDERADA Y NO PONDERADA</p>
+<pre class="r"><code>salud&lt;-enma %&gt;%
+  group_by(q36_salud) %&gt;% 
+  summarise( n=n(),
+             cantidad = sum(weightvec)) %&gt;% 
+  mutate(porcentaje_sin_pond = (n/sum(n))*100,
+    porcentaje_pond = (cantidad/sum(cantidad))*100) 
+
+salud</code></pre>
+<pre><code>## # A tibble: 6 × 5
+##   q36_salud                       n cantidad porcentaje_sin_pond porcentaje_pond
+##   &lt;chr&gt;                       &lt;int&gt;    &lt;dbl&gt;               &lt;dbl&gt;           &lt;dbl&gt;
+## 1 &quot;&quot;                             22     26.4               0.470           0.565
+## 2 &quot;Ninguna&quot;                    1993   2006.               42.6            42.9  
+## 3 &quot;No sé&quot;                       150    147.                3.21            3.15 
+## 4 &quot;Obra social (incluye PAMI…  1180   1332.               25.2            28.5  
+## 5 &quot;Prepaga o seguro privado&quot;    842    671.               18.0            14.3  
+## 6 &quot;Programa o plan estatal d…   492    496.               10.5            10.6</code></pre>
+<p>tabla de frecuencias bivariada o CRUCE DE VARIABLES</p>
+<pre class="r"><code>salud&lt;-enma %&gt;%
+  filter(!is.na(q36_salud) &amp; q36_salud!=&quot;No sé&quot; &amp; q36_salud!=&quot;&quot;) %&gt;%
+  filter(genero_agrup!=&quot;Prefiero no responder&quot;) %&gt;%
+  group_by(genero_agrup,q36_salud) %&gt;% 
+  summarise( n=n(),
+             cantidad = sum(weightvec)) %&gt;% 
+  mutate(porcentaje_sin_pond = (n/sum(n))*100,
+    porcentaje_pond = (cantidad/sum(cantidad))*100) </code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;genero_agrup&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>salud</code></pre>
+<pre><code>## # A tibble: 12 × 6
+## # Groups:   genero_agrup [3]
+##    genero_agrup q36_salud         n cantidad porcentaje_sin_pond porcentaje_pond
+##    &lt;chr&gt;        &lt;chr&gt;         &lt;int&gt;    &lt;dbl&gt;               &lt;dbl&gt;           &lt;dbl&gt;
+##  1 Mujer        Ninguna        1306     976.               43.6            42.6 
+##  2 Mujer        Obra social …   782     702.               26.1            30.6 
+##  3 Mujer        Prepaga o se…   547     322.               18.3            14.0 
+##  4 Mujer        Programa o p…   362     292.               12.1            12.7 
+##  5 Otro género  Ninguna          25      25                43.1            43.1 
+##  6 Otro género  Obra social …    17      17                29.3            29.3 
+##  7 Otro género  Prepaga o se…     9       9                15.5            15.5 
+##  8 Otro género  Programa o p…     7       7                12.1            12.1 
+##  9 Varón        Ninguna         656     999.               45.6            46.6 
+## 10 Varón        Obra social …   378     611.               26.3            28.5 
+## 11 Varón        Prepaga o se…   282     337.               19.6            15.7 
+## 12 Varón        Programa o p…   123     197.                8.55            9.19</code></pre>
+<pre class="r"><code>## exportar salud a excel
+#write.csv(salud, &quot;data/salud.csv&quot;, row.names = FALSE)
+
+
+#pivot results
+salud_pivot&lt;-salud %&gt;% 
+  select(q36_salud, genero_agrup, porcentaje_pond) %&gt;%
+  pivot_wider(names_from = genero_agrup, values_from = porcentaje_pond)
+
+salud_pivot</code></pre>
+<pre><code>## # A tibble: 4 × 4
+##   q36_salud                        Mujer `Otro género` Varón
+##   &lt;chr&gt;                            &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;
+## 1 Ninguna                           42.6          43.1 46.6 
+## 2 Obra social (incluye PAMI)        30.6          29.3 28.5 
+## 3 Prepaga o seguro privado          14.0          15.5 15.7 
+## 4 Programa o plan estatal de salud  12.7          12.1  9.19</code></pre>
 </div>
 </div>
 

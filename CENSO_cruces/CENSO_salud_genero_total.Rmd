@@ -1,8 +1,9 @@
 ---
-title: "CENSO_salud"
+title: "CENSO_salud_total"
 output: html_document
 ---
-## POBLACIÓN MIGRANTE
+
+## POBLACIÓN TOTAL
 # Cargar librerías
 ```{r librerias, echo=TRUE, message=FALSE, warning=FALSE}
 # Cargar librerías
@@ -14,17 +15,18 @@ library(kableExtra) # Mejora en la presentación de tablas
 ```
 
 # Cargar la base de datos de salud de CENSO 2023
-```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
+```{r carga_total, echo=TRUE, message=FALSE, warning=FALSE}
 # Carga del archivo xlsX con la base de datos de CENSO 2023
-censo_salud <- read_excel("data/CENSO_salud.xlsx", sheet = "Migrante")
+censo_salud_total <- read_excel("../data/CENSO_salud.xlsx", sheet = "total")
 # Verificar los nombres de las variables
-names(censo_salud)
-censo_salud
+names(censo_salud_total)
+censo_salud_total
+
+
 ```
 # Tabla de frecuencias
-
-```{r tabla_frecuencias, echo=TRUE}
-censo_salud_frecuencias <- censo_salud %>%
+```{r tabla_frecuencias_total, echo=TRUE}
+censo_salud_total_frecuencias <- censo_salud_total %>%
   rename(Salud = "...1", Mujer = `Mujer / Femenino`, Hombre = `Varón / Masculino`) %>%
   select(Salud, Mujer, Hombre) %>%
   mutate(Mujer = as.numeric(gsub("\\s+","",Mujer)),  # Eliminar espacios y convertir a numérico
@@ -32,8 +34,5 @@ censo_salud_frecuencias <- censo_salud %>%
   mutate(Porcentaje_Mujer = Mujer / sum(Mujer) * 100,
          Porcentaje_Hombre = Hombre / sum(Hombre) * 100) %>%
   select(Salud, Porcentaje_Mujer, Porcentaje_Hombre)
-
-censo_salud_frecuencias
-
-  
+censo_salud_total_frecuencias
 ```

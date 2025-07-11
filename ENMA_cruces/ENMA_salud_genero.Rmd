@@ -17,7 +17,7 @@ library(kableExtra) # Mejora en la presentación de tablas
 ```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
 
 # Carga del archivo CSV con la base de datos de la ENMA 2023
-enma <- read.csv("data/ENMA2023_final_public.csv")
+enma <- read.csv("../data/ENMA2023_final_public.csv")
 
 enma$q51_situacion_ocupacional
 #names(enma)
