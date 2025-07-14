@@ -19,7 +19,7 @@ library(openxlsx)   # Exportación de datos a Excel
 ```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
 
 # Carga del archivo CSV con la base de datos de la ENMA 2023
-enma <- read.csv("../data/ENMA2023_final_public.csv")
+enma <- read.csv("data/ENMA2023_final_public.csv")
 
 
 names(enma)
