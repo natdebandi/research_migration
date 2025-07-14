@@ -1,0 +1,190 @@
+---
+title: "ENMA_educacion"
+output: html_document
+---
+
+
+# Cargar librerías
+```{r librerias, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Cargar librerías
+library(tidyverse)  # Manipulación y visualización de datos
+library(readxl)     # Lectura de archivos Excel
+library(janitor)    # Limpieza y estandarización de nombres de variables
+library(knitr)      # Generación de tablas en documentos dinámicos
+library(kableExtra) # Mejora en la presentación de tablas
+library(openxlsx)   # Exportación de datos a Excel
+```
+
+# Cargar la base de datos ENMA 2023
+```{r carga, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Carga del archivo CSV con la base de datos de la ENMA 2023
+enma <- read.csv("data/ENMA2023_final_public.csv")
+
+
+names(enma)
+```
+
+# Pregunta q47 con q18
+
+```{r tabla_valores_absolutos, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Situacion DNI con q47
+q18_y_q47 <- enma %>%
+  filter(!is.na(q18_dni_situacion) & q18_dni_situacion != "") %>%
+  group_by(q18_dni_situacion, q47_estudiando_argentina) %>%
+  summarise(ponderado = sum(weightvec)) %>%
+  mutate (ponderado = round(ponderado, 0)) %>%
+  pivot_wider(names_from = q47_estudiando_argentina, values_from = ponderado) %>%
+  mutate(
+    'Total' = round(`Si` + `No`),  
+    'No' = round(No / Total * 100, 1),
+    'Si' = round(Si / Total * 100, 1)
+  ) 
+  
+
+q18_y_q47
+
+
+```
+
+# Pregunta q48 con q18
+
+```{r}
+##univariado de selecion multiple
+q48 <- enma %>%
+  filter(!is.na(q48_estudiando_nivel) & q48_estudiando_nivel!="" ) %>%
+  summarise(
+    Total = round(sum(weightvec, na.rm = TRUE), 0),
+    Primaria = round(sum(weightvec * q48_estudiando_nivel_prim, na.rm = TRUE), 0),
+    Secundaria = round(sum(weightvec * q48_estudiando_nivel_sec, na.rm = TRUE), 0),
+    Terceriario = round(sum(weightvec * q48_estudiando_nivel_ter, na.rm = TRUE), 0),
+    Universitario = round(sum(weightvec * q48_estudiando_nivel_uni, na.rm = TRUE), 0),
+    Postgrado = round(sum(weightvec * q48_estudiando_nivel_postgrado, na.rm = TRUE), 0),
+    Capacitaciones = round(sum(weightvec * q48_estudiando_nivel_capacitaciones, na.rm = TRUE), 0)
+  ) %>%
+  mutate(
+    'Primaria' = round(Primaria / Total * 100, 1),
+    'Secundaria' = round(Secundaria / Total * 100, 1),
+    'Terceriario' = round(Terceriario / Total * 100, 1),
+    'Universitario' = round( Universitario/ Total * 100, 1),
+    'Postgrado' = round(Postgrado / Total * 100, 1),
+    'Capacitaciones' = round(Capacitaciones / Total * 100, 1)
+  )
+
+##univariado de selecion multiple
+q18_y_q48 <- enma %>%
+  filter(!is.na(q48_estudiando_nivel) & q48_estudiando_nivel!="" ) %>%
+  group_by(q18_dni_situacion) %>%
+  filter(!is.na(q18_dni_situacion) & q18_dni_situacion != "") %>%
+  summarise(
+    Total = round(sum(weightvec, na.rm = TRUE), 0),
+    Primaria = round(sum(weightvec * q48_estudiando_nivel_prim, na.rm = TRUE), 0),
+    Secundaria = round(sum(weightvec * q48_estudiando_nivel_sec, na.rm = TRUE), 0),
+    Terceriario = round(sum(weightvec * q48_estudiando_nivel_ter, na.rm = TRUE), 0),
+    Universitario = round(sum(weightvec * q48_estudiando_nivel_uni, na.rm = TRUE), 0),
+    Postgrado = round(sum(weightvec * q48_estudiando_nivel_postgrado, na.rm = TRUE), 0),
+    Capacitaciones = round(sum(weightvec * q48_estudiando_nivel_capacitaciones, na.rm = TRUE), 0)
+  ) %>%
+  mutate(
+    'Primaria' = round(Primaria / Total * 100, 1),
+    'Secundaria' = round(Secundaria / Total * 100, 1),
+    'Terceriario' = round(Terceriario / Total * 100, 1),
+    'Universitario' = round(Universitario / Total * 100, 1),
+    'Postgrado' = round(Postgrado / Total * 100, 1),
+    'Capacitaciones' = round(Capacitaciones / Total * 100, 1)
+  )
+
+q18_y_q48
+
+```
+
+# Pregunta q49 con q18
+```{r}
+
+# Situacion DNI con q49
+q18_y_q49 <- enma %>%
+  filter(!is.na(q18_dni_situacion) & q18_dni_situacion != ""
+         & q49_estudiando_inconvenientes != "" & !is.na(q49_estudiando_inconvenientes)) %>%
+  group_by(q18_dni_situacion, q49_estudiando_inconvenientes) %>%
+  summarise(ponderado = sum(weightvec)) %>%
+  mutate (ponderado = round(ponderado, 0)) %>%
+  pivot_wider(names_from = q49_estudiando_inconvenientes, values_from = ponderado) %>%
+  mutate(
+    'Total' = round(`Sí` + `No tuve ningún problema`),
+    'No tuve ningún problema' = round(`No tuve ningún problema` / Total * 100, 1),
+    'Sí' = round(`Sí` / Total * 100, 1)
+  )
+  
+q18_y_q49
+
+```
+
+# Pregunta q50 y q18
+
+```{r}
+# Situacion DNI con q50
+
+q18_y_q50 <- enma1 %>%
+  filter(!is.na(q50_estudiando_problemas) & q50_estudiando_problemas != "") %>% 
+  group_by(q18_dni_situacion) %>%
+  filter(!is.na(q18_dni_situacion) & q18_dni_situacion != "") %>%
+  summarise(
+    'Con los títulos y competencias del país de origen' = round(sum(weightvec * q50_problemas_titulos_origen, na.rm = TRUE), 0),
+    'Por no tener DNI argentino' = round(sum(weightvec * q50_problemas_dni, na.rm = TRUE), 0),
+    'Falta de documentación escolar argentina' = round(sum(weightvec*q50_problemas_doc_escolar, na.rm = TRUE), 0),
+    'Con la inscripción online' = round(sum(weightvec*q50_problemas_inscripcion_online, na.rm = TRUE), 0),
+    'Costos' = round(sum(weightvec*q50_problemas_costos, na.rm = TRUE), 0),
+    'Discriminación y xenofobia en los servicios de atención' = round(sum(weightvec*q50_problemas_discriminacion , na.rm = TRUE), 0),
+    'Otros problemas' = round(sum(weightvec*q50_problemas_otros, na.rm = TRUE), 0),
+  ) %>%
+  mutate(
+    Total = rowSums(across(where(is.numeric)))
+  ) %>%
+  mutate(
+    'Con los títulos y competencias del país de origen' = ifelse(Total == 0, 0, round(`Con los títulos y competencias del país de origen` / Total * 100, 1)),
+    'Por no tener DNI argentino' = ifelse(Total == 0, 0, round(`Por no tener DNI argentino` / Total * 100, 1)),
+    'Falta de documentación escolar argentina' = ifelse(Total == 0, 0, round(`Falta de documentación escolar argentina` / Total * 100, 1)),
+    'Con la inscripción online' = ifelse(Total == 0, 0, round(`Con la inscripción online` / Total * 100, 1)),
+    'Costos' = ifelse(Total == 0, 0, round(`Costos` / Total * 100, 1)),
+    'Discriminación y xenofobia en los servicios de atención' = ifelse(Total == 0, 0, round(`Discriminación y xenofobia en los servicios de atención` / Total * 100, 1)),
+    'Otros problemas' = ifelse(Total == 0, 0, round(`Otros problemas` / Total * 100, 1))
+  )
+
+q18_y_q50
+
+
+```
+# Exportar a excel
+
+```{r exportar_excel, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Crear un archivo Excel para exportar los resultados
+
+file_export <- paste("situacion_dni\\", "ENMA_cruces", ".xlsx", sep="")
+
+wb <- createWorkbook()
+
+# Exportar todas las tabla a un archivo Excel
+
+tabla_list <- list(
+  "Q18_Q47" = q18_y_q47,
+  "Q18_Q48" = q18_y_q48,
+  "Q18_Q49" = q18_y_q49,
+  "Q18_Q50" = q18_y_q50
+  
+)
+
+# Crear hojas en el archivo Excel y escribir las tablas
+
+for (sheet_name in names(tabla_list)) {
+  addWorksheet(wb, sheet_name)
+  writeData(wb, sheet_name, tabla_list[[sheet_name]], rowNames = FALSE)
+}
+
+# Guardar el archivo Excel
+
+saveWorkbook(wb, file_export, overwrite = TRUE)
+
+```
